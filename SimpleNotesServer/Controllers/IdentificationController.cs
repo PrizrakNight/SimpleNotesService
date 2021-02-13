@@ -11,9 +11,9 @@ namespace SimpleNotesServer.Controllers
     [ValidationFilter]
     public class IdentificationController : ControllerBase
     {
-        private readonly IUserProfileService _userProfileService;
+        private readonly IUserIdentificationService _userProfileService;
 
-        public IdentificationController(IUserProfileService userProfileService)
+        public IdentificationController(IUserIdentificationService userProfileService)
         {
             _userProfileService = userProfileService;
         }
@@ -27,7 +27,7 @@ namespace SimpleNotesServer.Controllers
             return Ok(response);
         }
 
-        [HttpPost("authorize")]
+        [HttpPost("authorization")]
         [ServiceFilter(typeof(AuthorizationFilterAttribute))]
         public async Task<IActionResult> AuthorizeUserAsync([FromBody] UserRequest userRequest)
         {

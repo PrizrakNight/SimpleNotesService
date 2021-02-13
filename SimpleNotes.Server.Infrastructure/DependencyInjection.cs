@@ -9,9 +9,9 @@ namespace SimpleNotes.Server.Infrastructure
     {
         public static void AddDefaultInfrastructure(this IServiceCollection services, Action<DbContextOptionsBuilder> configureContext)
         {
-            services.AddTransient<IRepositoryWrapper, EntityFrameworkCoreRepositoryWrapper>();
+            services.AddTransient<IRepositoryWrapper, EFCoreRepositoryWrapper>();
 
-            services.AddDbContextPool<EntityFrameworkDbContext>(configureContext);
+            services.AddDbContextPool<EFCoreDbContext>(configureContext);
         }
     }
 }

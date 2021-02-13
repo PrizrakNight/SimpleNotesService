@@ -24,6 +24,7 @@ namespace SimpleNotes.Server.Application.Services.Implementation
         {
             var simpleNote = noteRequest.Adapt<SimpleNote>();
 
+            simpleNote.Key = 0;
             simpleNote.Created = simpleNote.Changed = DateTimeOffset.Now.ToUnixTimeSeconds();
             simpleNote.UserId = _userAccessor.CurrentUserId;
 
@@ -36,7 +37,7 @@ namespace SimpleNotes.Server.Application.Services.Implementation
 
         public async Task<bool> DeleteNoteAsync(int noteId)
         {
-            var userNote = _userAccessor.CurrentUser.Notes.FirstOrDefault(note => note.KeyEqualTo(noteId));
+            var userNote = _userAccessor.CurrentUser.Notes.FirstOrDefault(note => note.Key == noteId);
 
             if(userNote != default)
             {

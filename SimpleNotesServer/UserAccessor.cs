@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using SimpleNotes.Server.Application;
 using SimpleNotes.Server.Domain.Contracts;
 using SimpleNotes.Server.Domain.Entities;
 using System.Linq;
 using System.Security.Claims;
 
-namespace SimpleNotes.Server.Application
+namespace SimpleNotesServer
 {
     internal class UserAccessor : IUserAccessor
     {
@@ -12,7 +14,11 @@ namespace SimpleNotes.Server.Application
         {
             get
             {
-                var findedUser = _repositoryWrapper.Users.GetEntities().First(user => user.KeyEqualTo(CurrentUserId));
+                var findedUser = _repositoryWrapper.Users
+                    .GetEntities()
+                    .Include(user => user.Notes)
+                    .AsNoTracking()
+                    .First(user => user.Key == CurrentUserId);
 
                 return findedUser;
             }

@@ -28,14 +28,16 @@ namespace SimpleNotesServer
             var options = Configuration.GetSection("TokenProviderOptions").Get<TokenProviderOptions>();
             var securityKey = GetSecurityKey(options);
 
+            services.AddTransient<IUserAccessor, UserAccessor>();
+
             services.AddSingleton(options);
             services.AddDefaultApplication();
             services.AddDefaultApplicationFilters();
-            services.AddDefaultUserAccessor();
             services.AddHttpContextAccessor();
             services.AddDefaultInfrastructure(conf => conf.UseInMemoryDatabase("Test database"));
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(option => option.JsonSerializerOptions.IgnoreNullValues = true);
+
             services.AddAuthorization();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option =>
@@ -72,8 +74,8 @@ namespace SimpleNotesServer
             app.UseHttpsRedirection();
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,62 +1,41 @@
 ﻿using Mapster;
 using SimpleNotes.Server.Application.Models.Requests;
 using SimpleNotes.Server.Application.Models.Responses;
-using SimpleNotes.Server.Domain;
 using SimpleNotes.Server.Domain.Contracts;
-using SimpleNotes.Server.Domain.Entities;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SimpleNotes.Server.Application.Services.Implementation
 {
     internal class UserProfileService : IUserProfileService
     {
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IUserAccessor _userAccessor;
         private readonly IRepositoryWrapper _repositoryWrapper;
-        private readonly ITokenService _tokenService;
 
-        public UserProfileService(IPasswordHasher passwordHasher, IRepositoryWrapper repositoryWrapper, ITokenService tokenService)
+        public UserProfileService(IUserAccessor userAccessor, IRepositoryWrapper repositoryWrapper)
         {
-            _passwordHasher = passwordHasher;
+            _userAccessor = userAccessor;
             _repositoryWrapper = repositoryWrapper;
-            _tokenService = tokenService;
         }
 
-        public async Task<UserProfileResponse> AuthorizeAsync(UserRequest userRequest)
+        public Task<UserProfileResponse> GetProfileAsync()
         {
-            var findedUser = _repositoryWrapper.Users.GetEntities().ToArray().First(user => _passwordHasher.ComparePassword(userRequest.Password, user.PasswordHash));
-            var response = findedUser.Adapt<UserProfileResponse>();
+            var response = _userAccessor.CurrentUser.Adapt<UserProfileResponse>();
 
-            response.AccessToken = await _tokenService.GenerateTokenAsync(findedUser);
-
-            return response;
+            return Task.FromResult(response);
         }
 
-        public async Task<UserProfileResponse> RegisterAsync(UserRegistrationRequest userRequest)
+        public async Task UpdateProfileAsync(UserProfileRequest profileRequest)
         {
-            var simpleUser = new SimpleUser
-            {
-                Name = userRequest.Username,
-                AvatarUrl = userRequest.AvatarUrl,
-                Role = ServerRoles.User
-            };
+            var currentUser = _userAccessor.CurrentUser;
 
-            simpleUser.RegistrationDate = simpleUser.LastEntrance = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            simpleUser.PasswordHash = _passwordHasher.HashPassword(userRequest.Password);
+            if (!string.IsNullOrEmpty(profileRequest.Username))
+                currentUser.Name = profileRequest.Username;
 
-            if (string.IsNullOrEmpty(userRequest.AvatarUrl))
-                simpleUser.AvatarUrl = UserDefaults.DefaultAvatarUrl;
+            if (!string.IsNullOrEmpty(profileRequest.AvatarUrl))
+                currentUser.AvatarUrl = profileRequest.AvatarUrl;
 
-            await _repositoryWrapper.Users.InsertAsync(simpleUser);
-
-            var response = simpleUser.Adapt<UserProfileResponse>();
-
-            response.AccessToken = await _tokenService.GenerateTokenAsync(simpleUser);
-
+            await _repositoryWrapper.Users.UpdateAsync(currentUser);
             await _repositoryWrapper.SaveAsync();
-
-            return response;
         }
     }
 }

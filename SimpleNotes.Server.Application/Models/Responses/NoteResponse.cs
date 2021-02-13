@@ -2,7 +2,7 @@
 {
     public class NoteResponse
     {
-        public int Id { get; set; }
+        public int Key { get; set; }
 
         public string Name { get; set; }
 

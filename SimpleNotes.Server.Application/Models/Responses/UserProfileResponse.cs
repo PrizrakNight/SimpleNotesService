@@ -13,7 +13,5 @@
         public long RegistrationDate { get; set; }
 
         public long LastEntrance { get; set; }
-
-        public NoteResponse[] Notes { get; set; }
     }
 }

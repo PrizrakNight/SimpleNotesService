@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 
 namespace SimpleNotes.Server.Application.Services
 {
-    public interface IUserProfileService
+    public interface IUserIdentificationService
     {
-        Task UpdateProfileAsync(UserProfileRequest profileRequest);
-
-        Task<UserProfileResponse> GetProfileAsync();
+        Task<UserProfileResponse> AuthorizeAsync(UserRequest userRequest);
+        Task<UserProfileResponse> RegisterAsync(UserRegistrationRequest userRequest);
     }
 }

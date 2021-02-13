@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace SimpleNotes.Server.Infrastructure
 {
-    public class EntityFrameworkCoreRepository<TEntity> : IRepository<TEntity>
+    public class EFCoreRepository<TEntity> : IRepository<TEntity>
         where TEntity : EntityBase
     {
-        private readonly EntityFrameworkDbContext _context;
+        protected readonly EFCoreDbContext context;
 
-        public EntityFrameworkCoreRepository(EntityFrameworkDbContext context)
+        public EFCoreRepository(EFCoreDbContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         public Task DeleteAsync(TEntity entity)
         {
-            var set = _context.Set<TEntity>();
+            var set = context.Set<TEntity>();
             var finded = set.Find(entity.Key);
 
             if (finded != default)
@@ -29,25 +29,19 @@ namespace SimpleNotes.Server.Infrastructure
 
         public IQueryable<TEntity> GetEntities()
         {
-            return _context.Set<TEntity>().AsNoTracking();
+            return context.Set<TEntity>().AsNoTracking();
         }
 
         public async Task<TEntity> InsertAsync(TEntity entity)
         {
-            await _context.Set<TEntity>().AddAsync(entity);
+            await context.Set<TEntity>().AddAsync(entity);
 
             return entity;
         }
 
-        public Task<TEntity> UpdateAsync(TEntity entity)
+        public virtual Task<TEntity> UpdateAsync(TEntity entity)
         {
-            var set = _context.Set<TEntity>();
-            var finded = set.Find(entity.Key);
-
-            if (finded != default)
-            {
-                _context.Entry(entity).State = EntityState.Modified;
-            }
+            context.Set<TEntity>().Update(entity);
 
             return Task.FromResult(entity);
         }

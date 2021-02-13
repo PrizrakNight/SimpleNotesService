@@ -12,20 +12,18 @@ namespace SimpleNotes.Server.Application
             services.AddScoped<UserRegistrationFilterAttribute>();
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<AuthorizationFilterAttribute>();
+            services.AddScoped<UserHasNoteFilterAttribute>();
+            services.AddScoped<UsernameMatchFilterAttribute>();
         }
 
         public static void AddDefaultApplication(this IServiceCollection services)
         {
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<INoteService, NoteService>();
+            services.AddScoped<IUserIdentificationService, UserIdentificationService>();
             services.AddScoped<IUserProfileService, UserProfileService>();
 
             services.AddTransient<ITokenService, TokenService>();
-        }
-
-        public static void AddDefaultUserAccessor(this IServiceCollection services)
-        {
-            services.AddScoped<IUserAccessor, UserAccessor>();
         }
     }
 }
