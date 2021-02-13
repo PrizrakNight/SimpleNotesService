@@ -29,6 +29,8 @@ namespace SimpleNotes.Server.Application.Services.Implementation
 
             var createdNote = await _repositoryWrapper.Notes.InsertAsync(simpleNote);
 
+            await _repositoryWrapper.SaveAsync();
+
             return createdNote.Adapt<NoteResponse>();
         }
 
@@ -39,6 +41,7 @@ namespace SimpleNotes.Server.Application.Services.Implementation
             if(userNote != default)
             {
                 await _repositoryWrapper.Notes.DeleteAsync(userNote);
+                await _repositoryWrapper.SaveAsync();
 
                 return true;
             }
@@ -57,6 +60,8 @@ namespace SimpleNotes.Server.Application.Services.Implementation
         {
             var simpleNote = noteRequest.Adapt<SimpleNote>();
             var changedNote = await _repositoryWrapper.Notes.UpdateAsync(simpleNote);
+
+            await _repositoryWrapper.SaveAsync();
 
             return changedNote.Adapt<NoteResponse>();
         }
