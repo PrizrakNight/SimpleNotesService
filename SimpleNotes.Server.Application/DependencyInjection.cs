@@ -9,11 +9,15 @@ namespace SimpleNotes.Server.Application
         public static void AddDefaultApplication(this IServiceCollection services)
         {
             services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<INoteService, NoteService>();
             services.AddScoped<IUserProfileService, UserProfileService>();
 
             services.AddTransient<ITokenService, TokenService>();
+        }
+
+        public static void AddDefaultUserAccessor(this IServiceCollection services)
+        {
+            services.AddScoped<IUserAccessor, UserAccessor>();
         }
     }
 }
