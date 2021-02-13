@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using SimpleNotes.Server.Application.Models.Requests;
 using SimpleNotes.Server.Application.Models.Responses;
+using SimpleNotes.Server.Domain;
 using SimpleNotes.Server.Domain.Contracts;
 using SimpleNotes.Server.Domain.Entities;
 using System;
@@ -24,8 +25,7 @@ namespace SimpleNotes.Server.Application.Services.Implementation
 
         public async Task<UserProfileResponse> AuthorizeAsync(UserRequest userRequest)
         {
-            var passwordHash = _passwordHasher.HashPassword(userRequest.Password);
-            var findedUser = _repositoryWrapper.Users.GetEntities().First(user => user.PasswordHash.Equals(passwordHash) && user.Name.Equals(userRequest.Username));
+            var findedUser = _repositoryWrapper.Users.GetEntities().ToArray().First(user => _passwordHasher.ComparePassword(userRequest.Password, user.PasswordHash));
             var response = findedUser.Adapt<UserProfileResponse>();
 
             response.AccessToken = await _tokenService.GenerateTokenAsync(findedUser);
@@ -35,16 +35,26 @@ namespace SimpleNotes.Server.Application.Services.Implementation
 
         public async Task<UserProfileResponse> RegisterAsync(UserRegistrationRequest userRequest)
         {
-            var simpleUser = userRequest.Adapt<SimpleUser>();
+            var simpleUser = new SimpleUser
+            {
+                Name = userRequest.Username,
+                AvatarUrl = userRequest.AvatarUrl,
+                Role = ServerRoles.User
+            };
 
             simpleUser.RegistrationDate = simpleUser.LastEntrance = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             simpleUser.PasswordHash = _passwordHasher.HashPassword(userRequest.Password);
+
+            if (string.IsNullOrEmpty(userRequest.AvatarUrl))
+                simpleUser.AvatarUrl = UserDefaults.DefaultAvatarUrl;
 
             await _repositoryWrapper.Users.InsertAsync(simpleUser);
 
             var response = simpleUser.Adapt<UserProfileResponse>();
 
             response.AccessToken = await _tokenService.GenerateTokenAsync(simpleUser);
+
+            await _repositoryWrapper.SaveAsync();
 
             return response;
         }

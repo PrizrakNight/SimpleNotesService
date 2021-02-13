@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SimpleNotes.Server.Application.Options;
 using SimpleNotes.Server.Domain.Entities;
@@ -13,9 +12,9 @@ namespace SimpleNotes.Server.Application.Services.Implementation
 {
     internal class TokenService : ITokenService
     {
-        private readonly IOptions<TokenProviderOptions> _options;
+        private readonly TokenProviderOptions _options;
 
-        public TokenService(IOptions<TokenProviderOptions> options)
+        public TokenService(TokenProviderOptions options)
         {
             _options = options;
         }
@@ -32,15 +31,15 @@ namespace SimpleNotes.Server.Application.Services.Implementation
         private JwtSecurityToken GetJwtSecurityToken(ClaimsIdentity claimsIdentity)
         {
             var utcNow = DateTime.UtcNow;
-            var expiration = utcNow.Add(TimeSpan.FromHours(_options.Value.TokenExpiration));
+            var expiration = utcNow.Add(TimeSpan.FromHours(_options.TokenExpiration));
             var signingCredentials = GetSigningCredentials();
 
-            return new JwtSecurityToken(_options.Value.Issuer, _options.Value.Audience, claimsIdentity.Claims, utcNow, expiration, signingCredentials);
+            return new JwtSecurityToken(_options.Issuer, _options.Audience, claimsIdentity.Claims, utcNow, expiration, signingCredentials);
         }
 
         private SigningCredentials GetSigningCredentials()
         {
-            var appSecretBytes = Encoding.ASCII.GetBytes(_options.Value.ApplicationSecret);
+            var appSecretBytes = Encoding.ASCII.GetBytes(_options.ApplicationSecret);
             var securityKey = new SymmetricSecurityKey(appSecretBytes);
 
             return new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

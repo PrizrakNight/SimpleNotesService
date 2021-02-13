@@ -3,34 +3,37 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using SimpleNotes.Server.Application.Models.Requests;
 using SimpleNotes.Server.Application.Models.Responses;
 using SimpleNotes.Server.Domain.Contracts;
-using System;
 using System.Linq;
 
 namespace SimpleNotes.Server.Application.Filters
 {
-    public class UserRegistrationFilterAttribute : ActionFilterAttribute
+    public class AuthorizationFilterAttribute : ActionFilterAttribute
     {
+        private readonly IPasswordHasher _passwordHasher;
         private readonly IRepositoryWrapper _repositoryWrapper;
 
-        public UserRegistrationFilterAttribute(IRepositoryWrapper repositoryWrapper)
+        public AuthorizationFilterAttribute(IPasswordHasher passwordHasher, IRepositoryWrapper repositoryWrapper)
         {
+            _passwordHasher = passwordHasher;
             _repositoryWrapper = repositoryWrapper;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var registrationRequest = (UserRegistrationRequest)context.ActionArguments.FirstOrDefault(arg => arg.Value is UserRegistrationRequest).Value;
+            var userRequest = context.ActionArguments.FirstOrDefault(arg => arg.Value is UserRequest).Value as UserRequest;
 
-            if (registrationRequest != default)
+            if (userRequest != default)
             {
-                var users = _repositoryWrapper.Users.GetEntities();
+                var findedUser = _repositoryWrapper.Users.GetEntities()
+                    .ToArray()
+                    .FirstOrDefault(user => _passwordHasher.ComparePassword(userRequest.Password, user.PasswordHash));
 
-                if (users.Any(user => user.Name.Equals(registrationRequest.Username, StringComparison.OrdinalIgnoreCase)))
+                if (findedUser == default)
                 {
                     context.Result = new BadRequestObjectResult(new BadResponse
                     {
                         StatusCode = 401,
-                        Message = "A user with this name is already registered."
+                        Message = "Wrong login or password"
                     });
                 }
             }
