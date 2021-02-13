@@ -1,5 +1,4 @@
 ﻿using SimpleNotesClient.ViewModels;
-using Flurl.Http;
 using SimpleNotesClient.Managers;
 using SimpleNotesClient.Models.Authentication;
 using SimpleNotesClient.Views;

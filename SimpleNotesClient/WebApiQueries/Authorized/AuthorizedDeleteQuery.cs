@@ -1,7 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Flurl;
-using Flurl.Http;
 using SimpleNotesClient.Managers;
 
 namespace SimpleNotesClient.WebApiQueries.Authorized
