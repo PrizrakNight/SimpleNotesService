@@ -27,7 +27,7 @@ namespace SimpleNotes.Server.Application.Filters
                     context.Result = new BadRequestObjectResult(new BadResponse
                     {
                         StatusCode = 404,
-                        Message = "Note with key '{noteKey}' not found on user"
+                        Message = $"Note with key '{noteKey}' not found on user"
                     });
                 }
             }
