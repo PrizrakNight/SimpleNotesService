@@ -24,7 +24,7 @@ namespace SimpleNotes.Server.Application.Services.Implementation
             return Task.FromResult(response);
         }
 
-        public async Task UpdateProfileAsync(UserProfileRequest profileRequest)
+        public async Task<UserProfileResponse> UpdateProfileAsync(UserProfileRequest profileRequest)
         {
             var currentUser = _userAccessor.CurrentUser;
 
@@ -34,8 +34,11 @@ namespace SimpleNotes.Server.Application.Services.Implementation
             if (!string.IsNullOrEmpty(profileRequest.AvatarUrl))
                 currentUser.AvatarUrl = profileRequest.AvatarUrl;
 
-            await _repositoryWrapper.Users.UpdateAsync(currentUser);
+            var updatedUser = await _repositoryWrapper.Users.UpdateAsync(currentUser);
+
             await _repositoryWrapper.SaveAsync();
+
+            return updatedUser.Adapt<UserProfileResponse>();
         }
     }
 }

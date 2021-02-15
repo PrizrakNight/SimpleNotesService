@@ -18,17 +18,19 @@ namespace SimpleNotesServer.Sdk
             }
         }
 
-        public INoteClient NoteClient => throw new NotImplementedException();
+        public INoteClient NoteClient { get; }
 
-        public IUserProfileClient ProfileClient => throw new NotImplementedException();
+        public IUserProfileClient ProfileClient { get; }
 
         private readonly HttpClient _httpClient;
 
         public NoteServiceClient(string baseApiUrl)
         {
             _httpClient = new HttpClient();
-
             _httpClient.BaseAddress = new Uri($"{baseApiUrl}/");
+
+            ProfileClient = new UserProfileClient(_httpClient);
+            NoteClient = new NoteClient(_httpClient);
         }
 
         public async Task LoginAsync(string password, string username)

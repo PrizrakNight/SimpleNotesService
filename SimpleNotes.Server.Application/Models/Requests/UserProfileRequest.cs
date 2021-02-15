@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace SimpleNotes.Server.Application.Models.Requests
 {
@@ -7,6 +8,7 @@ namespace SimpleNotes.Server.Application.Models.Requests
         [DefaultValue("https://www.example.com/images/avatar.png")]
         public string AvatarUrl { get; set; }
 
+        [JsonPropertyName("name")]
         [DefaultValue("Adriano Giudice")]
         public string Username { get; set; }
     }

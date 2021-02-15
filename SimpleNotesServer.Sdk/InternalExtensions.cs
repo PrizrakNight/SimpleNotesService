@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿using SimpleNotesServer.Sdk.Exceptions;
+using System;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -9,24 +12,51 @@ namespace SimpleNotesServer.Sdk
     {
         public static async Task<TResponse> SendObjectAsync<TResponse>(this HttpClient httpClient, string url, string method, object @object)
         {
-            var requestMessage = new HttpRequestMessage
+            var responseMessage = new HttpResponseMessage();
+            var jsonString = string.Empty;
+
+            try
             {
-                Content = GetStringContent(@object),
-                Method = new HttpMethod(method)
-            };
+                var requestMessage = new HttpRequestMessage
+                {
+                    Content = GetStringContent(@object),
+                    Method = new HttpMethod(method),
+                    RequestUri = new Uri(httpClient.BaseAddress + url)
+                };
 
-            var responseMessage = await httpClient.SendAsync(requestMessage);
-            var jsonString = await responseMessage.Content.ReadAsStringAsync();
+                responseMessage = await httpClient.SendAsync(requestMessage);
+                jsonString = await responseMessage.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<TResponse>(jsonString);
+                if (responseMessage.StatusCode != HttpStatusCode.OK)
+                    throw new InvalidRequestException(jsonString, responseMessage.StatusCode, default);
+
+                return JsonSerializer.Deserialize<TResponse>(jsonString);
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidRequestException(jsonString, responseMessage.StatusCode, exception);
+            }
         }
 
         public static async Task<TResponse> GetObjectAsync<TResponse>(this HttpClient httpClient, string url)
         {
-            var responseMessage = await httpClient.GetAsync(url);
-            var jsonString = await responseMessage.Content.ReadAsStringAsync();
+            var responseMessage = new HttpResponseMessage();
+            var jsonString = string.Empty;
 
-            return JsonSerializer.Deserialize<TResponse>(jsonString);
+            try
+            {
+                responseMessage = await httpClient.GetAsync(url);
+                jsonString = await responseMessage.Content.ReadAsStringAsync();
+
+                if (responseMessage.StatusCode != HttpStatusCode.OK)
+                    throw new InvalidRequestException(jsonString, responseMessage.StatusCode, default);
+
+                return JsonSerializer.Deserialize<TResponse>(jsonString);
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidRequestException(jsonString, responseMessage.StatusCode, exception);
+            }
         }
 
         private static StringContent GetStringContent(object @object)

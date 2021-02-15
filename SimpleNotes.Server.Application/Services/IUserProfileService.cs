@@ -6,7 +6,7 @@ namespace SimpleNotes.Server.Application.Services
 {
     public interface IUserProfileService
     {
-        Task UpdateProfileAsync(UserProfileRequest profileRequest);
+        Task<UserProfileResponse> UpdateProfileAsync(UserProfileRequest profileRequest);
 
         Task<UserProfileResponse> GetProfileAsync();
     }

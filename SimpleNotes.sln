@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleNotesServer", "SimpleNotesServer\SimpleNotesServer.csproj", "{23E00500-66AD-49EC-936D-F31D31F01EBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleNotesClient", "SimpleNotesClient\SimpleNotesClient.csproj", "{9664D664-9E2E-405D-AEBC-0D1B508E861D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{C04F31B2-3824-45EB-B48F-54D3A4F56E74}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleNotes.Server.Domain", "SimpleNotes.Server.Domain\SimpleNotes.Server.Domain.csproj", "{DE4EB656-C3A7-4934-A4A3-20EBA6363F46}"
@@ -15,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleNotes.Server.Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleNotes.Server.Infrastructure", "SimpleNotes.Server.Infrastructure\SimpleNotes.Server.Infrastructure.csproj", "{5D81A00D-2B33-494F-B9C0-55E6E87130A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleNotesServer.Sdk", "SimpleNotesServer.Sdk\SimpleNotesServer.Sdk.csproj", "{177ECAF1-13A3-479F-A6B5-33CF7389CD9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleNotesServer.Sdk", "SimpleNotesServer.Sdk\SimpleNotesServer.Sdk.csproj", "{177ECAF1-13A3-479F-A6B5-33CF7389CD9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{4CD54C9A-0412-42D6-9A48-0037D6F2A3EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleNotes.Client.ConsoleApp", "SimpleNotes.Client.ConsoleApp\SimpleNotes.Client.ConsoleApp.csproj", "{CAC5BFD4-0DCF-4DA7-85F2-0BABA284AA35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +29,6 @@ Global
 		{23E00500-66AD-49EC-936D-F31D31F01EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23E00500-66AD-49EC-936D-F31D31F01EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23E00500-66AD-49EC-936D-F31D31F01EBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9664D664-9E2E-405D-AEBC-0D1B508E861D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9664D664-9E2E-405D-AEBC-0D1B508E861D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9664D664-9E2E-405D-AEBC-0D1B508E861D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9664D664-9E2E-405D-AEBC-0D1B508E861D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE4EB656-C3A7-4934-A4A3-20EBA6363F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE4EB656-C3A7-4934-A4A3-20EBA6363F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE4EB656-C3A7-4934-A4A3-20EBA6363F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +45,10 @@ Global
 		{177ECAF1-13A3-479F-A6B5-33CF7389CD9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{177ECAF1-13A3-479F-A6B5-33CF7389CD9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{177ECAF1-13A3-479F-A6B5-33CF7389CD9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAC5BFD4-0DCF-4DA7-85F2-0BABA284AA35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC5BFD4-0DCF-4DA7-85F2-0BABA284AA35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC5BFD4-0DCF-4DA7-85F2-0BABA284AA35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC5BFD4-0DCF-4DA7-85F2-0BABA284AA35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +58,7 @@ Global
 		{DE4EB656-C3A7-4934-A4A3-20EBA6363F46} = {C04F31B2-3824-45EB-B48F-54D3A4F56E74}
 		{BB2EE542-3445-4337-B69D-7FAAF75DFD3F} = {C04F31B2-3824-45EB-B48F-54D3A4F56E74}
 		{5D81A00D-2B33-494F-B9C0-55E6E87130A6} = {C04F31B2-3824-45EB-B48F-54D3A4F56E74}
+		{CAC5BFD4-0DCF-4DA7-85F2-0BABA284AA35} = {4CD54C9A-0412-42D6-9A48-0037D6F2A3EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D7831B2C-20D6-4270-9CB4-ED244CE66241}

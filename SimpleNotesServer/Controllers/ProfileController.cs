@@ -34,9 +34,7 @@ namespace SimpleNotesServer.Controllers
         [ServiceFilter(typeof(UsernameMatchFilterAttribute))]
         public async Task<IActionResult> UpdateProfileAsync([FromBody] UserProfileRequest profileRequest)
         {
-            await _userProfileService.UpdateProfileAsync(profileRequest);
-
-            return Ok();
+            return Ok(await _userProfileService.UpdateProfileAsync(profileRequest));
         }
     }
 }

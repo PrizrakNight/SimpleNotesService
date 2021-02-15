@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SimpleNotes.Server.Application.Models.Requests
 {
     public class UserRequest
     {
+        [JsonPropertyName("name")]
         [DefaultValue("Adriano Giudice")]
         [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; }
