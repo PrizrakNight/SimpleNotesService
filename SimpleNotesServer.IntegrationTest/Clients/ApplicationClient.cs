@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 
-namespace SimpleNotesServer.IntegrationTests.Clients
+namespace SimpleNotesServer.IntegrationTest.Clients
 {
     public class ApplicationClient
     {

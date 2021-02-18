@@ -1,6 +1,6 @@
 ﻿using SimpleNotes.Server.Application.Models.Requests;
 using SimpleNotes.Server.Application.Models.Responses;
-using SimpleNotesServer.IntegrationTests.Clients;
+using SimpleNotesServer.IntegrationTest.Clients;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SimpleNotesServer.IntegrationTests.Endpoints
+namespace SimpleNotesServer.IntegrationTest.Endpoints
 {
     public class IdentificationTests : IClassFixture<ApplicationClient>
     {

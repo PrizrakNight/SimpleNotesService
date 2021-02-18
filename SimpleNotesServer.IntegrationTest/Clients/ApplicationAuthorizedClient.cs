@@ -4,7 +4,7 @@ using SimpleNotes.Server.Application.Models.Responses;
 using SimpleNotes.Server.Application.Services;
 using System.Net.Http.Headers;
 
-namespace SimpleNotesServer.IntegrationTests.Clients
+namespace SimpleNotesServer.IntegrationTest.Clients
 {
     public class ApplicationAuthorizedClient : ApplicationClient
     {
