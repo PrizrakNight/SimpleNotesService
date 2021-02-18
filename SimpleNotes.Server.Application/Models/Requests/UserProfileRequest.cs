@@ -5,6 +5,7 @@ namespace SimpleNotes.Server.Application.Models.Requests
 {
     public class UserProfileRequest
     {
+        [JsonPropertyName("avatarUrl")]
         [DefaultValue("https://www.example.com/images/avatar.png")]
         public string AvatarUrl { get; set; }
 

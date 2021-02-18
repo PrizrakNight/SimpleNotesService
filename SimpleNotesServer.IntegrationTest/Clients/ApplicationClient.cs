@@ -7,6 +7,7 @@ using SimpleNotes.Server.Application;
 using SimpleNotes.Server.Domain.Entities;
 using SimpleNotes.Server.Infrastructure;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
@@ -66,7 +67,20 @@ namespace SimpleNotesServer.IntegrationTest.Clients
                 PasswordHash = passwordHasher.HashPassword("Instant_0rd"),
                 Role = "User",
                 RegistrationDate = DateTimeOffset.Now.ToUnixTimeSeconds(),
-                LastEntrance = DateTimeOffset.Now.ToUnixTimeSeconds()
+                LastEntrance = DateTimeOffset.Now.ToUnixTimeSeconds(),
+                Notes = new HashSet<SimpleNote>
+                {
+                    new SimpleNote
+                    {
+                        Name = "The test note",
+                        Content = "The test content"
+                    },
+                    new SimpleNote
+                    {
+                        Name = "Note for delete",
+                        Content = "Deleted content"
+                    }
+                }
             };
 
             eFCoreDbContext.Users.Add(InstantTestUser);
