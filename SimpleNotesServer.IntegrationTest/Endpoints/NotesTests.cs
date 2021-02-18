@@ -58,7 +58,7 @@ namespace SimpleNotesServer.IntegrationTest.Endpoints
             var message = new HttpRequestMessage
             {
                 Content = content,
-                RequestUri = new Uri("http://localhost/api/notes"),
+                RequestUri = new Uri($"{_applicationAuthorizedClient.Client.BaseAddress}api/notes"),
                 Method = new HttpMethod("PATCH")
             };
 
