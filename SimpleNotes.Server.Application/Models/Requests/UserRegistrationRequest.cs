@@ -5,7 +5,7 @@ namespace SimpleNotes.Server.Application.Models.Requests
 {
     public class UserRegistrationRequest : UserRequest
     {
-        [DefaultValue("My_SecretPassw0rd")]
+        [DefaultValue("My_passw0rd")]
         [Required(ErrorMessage = "Password confirmation is required")]
         [DataType(DataType.Password)]
         [Compare(nameof(Password))]
