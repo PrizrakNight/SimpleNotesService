@@ -44,5 +44,28 @@ namespace SimpleNotesServer.IntegrationTests.Endpoints
             Assert.Equal(request.Username, profile.Name);
             Assert.False(string.IsNullOrEmpty(profile.AccessToken));
         }
+
+        [Fact]
+        public async Task Post_AuthorizeAsInstantReturnProfileResponse()
+        {
+            var request = new UserRequest
+            {
+                Username = _applicationClient.InstantTestUser.Name,
+                Password = "Instant_0rd"
+            };
+
+            var jsonString = JsonSerializer.Serialize(request);
+            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+            var response = await _applicationClient.Client.PostAsync("/api/identification/authorization", content);
+            var responseJson = await response.Content.ReadAsStringAsync();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var profile = JsonSerializer.Deserialize<UserProfileResponse>(responseJson);
+
+            Assert.Equal(request.Username, profile.Name);
+            Assert.False(string.IsNullOrEmpty(profile.AccessToken));
+        }
     }
 }

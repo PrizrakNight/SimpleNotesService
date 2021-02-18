@@ -63,7 +63,7 @@ namespace SimpleNotesServer.IntegrationTests.Clients
             {
                 AvatarUrl = "https://www.instantTest.com/avatar.png",
                 Name = "Instant User Test",
-                PasswordHash = passwordHasher.HashPassword("Instant_Passw0rd"),
+                PasswordHash = passwordHasher.HashPassword("Instant_0rd"),
                 Role = "User",
                 RegistrationDate = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 LastEntrance = DateTimeOffset.Now.ToUnixTimeSeconds()
