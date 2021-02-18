@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleNotesServer.Sdk\SimpleNotesServer.Sdk.csproj" />
+    <ProjectReference Include="..\..\SimpleNotesServer.Sdk\SimpleNotesServer.Sdk.csproj" />
   </ItemGroup>
 
 </Project>

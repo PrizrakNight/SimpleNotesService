@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleNotes.Server.Application\SimpleNotes.Server.Application.csproj" />
-    <ProjectReference Include="..\SimpleNotes.Server.Infrastructure\SimpleNotes.Server.Infrastructure.csproj" />
+    <ProjectReference Include="..\Core\SimpleNotes.Server.Application\SimpleNotes.Server.Application.csproj" />
+    <ProjectReference Include="..\Core\SimpleNotes.Server.Infrastructure\SimpleNotes.Server.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
