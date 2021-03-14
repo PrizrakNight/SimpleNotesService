@@ -5,8 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Core;
 using SimpleNotes.Server.Application;
 using SimpleNotes.Server.Application.Options;
 using SimpleNotes.Server.Infrastructure;
@@ -24,7 +27,6 @@ namespace SimpleNotesServer
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var options = Configuration.GetSection("TokenProviderOptions").Get<TokenProviderOptions>();
@@ -37,6 +39,7 @@ namespace SimpleNotesServer
             services.AddDefaultApplicationFilters();
             services.AddHttpContextAccessor();
             services.AddDefaultInfrastructure(conf => conf.UseInMemoryDatabase("Test database"));
+            services.AddSerilog(Configuration);
 
             services.AddControllers().AddJsonOptions(option => option.JsonSerializerOptions.IgnoreNullValues = true);
             services.AddSwaggerGen(ConfigureSwaggerGen);
@@ -59,6 +62,32 @@ namespace SimpleNotesServer
                         ValidateIssuerSigningKey = true,
                     };
                 });
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, Logger logger)
+        {
+            loggerFactory.AddSerilog(logger);
+
+            if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Simple Notes v1.0");
+            });
+
+            app.UseHttpsRedirection();
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
 
         private void ConfigureSwaggerGen(SwaggerGenOptions obj)
@@ -94,31 +123,6 @@ namespace SimpleNotesServer
             var appSecretBytes = Encoding.ASCII.GetBytes(options.ApplicationSecret);
 
             return new SymmetricSecurityKey(appSecretBytes);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Simple Notes v1.0");
-            });
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }
