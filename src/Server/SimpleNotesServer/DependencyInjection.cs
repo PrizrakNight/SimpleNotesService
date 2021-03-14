@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Json;
 using System;
@@ -19,13 +20,15 @@ namespace SimpleNotesServer
         {
             var configuration = new LoggerConfiguration();
 
+            configuration.MinimumLevel.Debug();
+
             configuration.Enrich.WithExceptionDetails();
             configuration.Enrich.WithClientAgent();
             configuration.Enrich.WithClientIp();
             configuration.Enrich.WithMachineName();
 
             configuration.WriteTo.Console();
-            configuration.WriteTo.RollingFile(new JsonFormatter(renderMessage: true), "logs/log-{Date}.log");
+            configuration.WriteTo.RollingFile(new JsonFormatter(renderMessage: true), "logs/log-{Date}.log", LogEventLevel.Debug);
 
             return configuration.CreateLogger();
         }
